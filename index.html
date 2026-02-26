@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SRS Mobile Terminal - Full Data</title>
+    <style>
+        @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+        :root {
+            --bg-black: #050505; --panel-bg: #0f0f0f; --accent-red: #8b0000;
+            --bright-red: #ff3131; --text-gray: #888; --border-color: #1a1a1a;
+            --ss: #ff3131; --s: #ff6e6e; --a: #ff9f43; --b: #54a0ff; --c: #1dd1a1; --d: #c8d6e5;
+        }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { background-color: var(--bg-black); color: #e0e0e0; font-family: 'Pretendard', sans-serif; margin: 0; padding: 0; overflow-x: hidden; }
+        header { position: sticky; top: 0; background: rgba(10, 10, 10, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--accent-red); padding: 15px; text-align: center; z-index: 500; }
+        .logo { font-size: 1.1rem; font-weight: 900; color: var(--bright-red); letter-spacing: 2px; }
+        main { padding: 10px 15px 100px 15px; }
+        .section { display: none; } .section.active { display: block; }
+        .tab-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #0a0a0a; border-top: 1px solid var(--border-color); display: flex; justify-content: space-around; padding: 10px 0 calc(10px + env(safe-area-inset-bottom)); z-index: 600; }
+        .tab-item { color: var(--text-gray); font-size: 0.7rem; text-align: center; text-decoration: none; display: flex; flex-direction: column; gap: 4px; width: 33%; }
+        .tab-item.active { color: var(--bright-red); }
+        .category-title { font-size: 0.75rem; color: var(--text-gray); border-left: 2px solid var(--accent-red); padding-left: 8px; margin: 25px 0 12px; font-weight: 700; text-transform: uppercase; }
+        .agent-card { background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 15px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .agent-info h4 { margin: 0; font-size: 1rem; color: #fff; }
+        .agent-info p { margin: 4px 0 0; font-size: 0.75rem; }
+        .rank-info-scroll { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px; scroll-snap-type: x mandatory; }
+        .rank-card-m { min-width: 240px; background: #151515; border-top: 3px solid #333; padding: 15px; border-radius: 4px; scroll-snap-align: start; }
+        .rank-card-m h5 { margin: 0 0 10px; font-size: 0.85rem; }
+        .rank-card-m ul { margin: 0; padding-left: 15px; font-size: 0.75rem; color: #999; line-height: 1.6; }
+        .detail-view { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-black); z-index: 1000; overflow-y: auto; display: none; }
+        .detail-header-m { height: 400px; background-size: cover; background-position: center; position: relative; border-bottom: 2px solid var(--bright-red); }
+        .detail-header-m::after { content: ""; position: absolute; bottom: 0; left: 0; width: 100%; height: 60%; background: linear-gradient(transparent, var(--bg-black)); }
+        .close-btn { position: absolute; top: 20px; left: 20px; z-index: 1001; background: rgba(0,0,0,0.6); color: #fff; padding: 10px 18px; border-radius: 30px; font-size: 0.85rem; border: 1px solid #555; backdrop-filter: blur(5px); }
+        .detail-content-m { padding: 20px; margin-top: -20px; position: relative; z-index: 1002; }
+        .info-row { border-bottom: 1px solid #1a1a1a; padding: 15px 0; display: flex; flex-direction: column; gap: 5px; }
+        .info-row label { font-size: 0.7rem; color: var(--bright-red); font-weight: bold; letter-spacing: 1px; }
+        .info-row span { font-size: 1rem; color: #ddd; line-height: 1.6; }
+    </style>
+</head>
+<body>
+
+<div id="detailView" class="detail-view">
+    <div class="close-btn" onclick="closeDetail()">← BACK</div>
+    <div id="detPhoto" class="detail-header-m"></div>
+    <div class="detail-content-m">
+        <h2 id="detName" style="font-size: 2rem; margin:0;"></h2>
+        <div id="detDeptPos" style="color:var(--text-gray); margin-bottom:20px;"></div>
+        <div id="detInfoList"></div>
+    </div>
+</div>
+
+<header><div class="logo">SRS MOBILE TERMINAL</div></header>
+
+<main>
+    <div id="sec-eab" class="section active">
+        <h1 style="font-size: 1.6rem; margin: 10px 0;">Exorcism Bureau</h1>
+        
+        <div class="category-title">EAB RANKING SYSTEM</div>
+        <div class="rank-info-scroll">
+            <div class="rank-card-m" style="border-color: var(--ss);"><h5 class="ss">관리급 요원</h5><ul><li>대통령 직접 승인 관리직</li><li>리미터 원격 제어 권한</li><li>하급 요원 즉결 처분권</li><li>초법적 행위 면책 특권</li></ul></div>
+            <div class="rank-card-m" style="border-color: var(--s);"><h5 class="s">선임급 요원</h5><ul><li>사상 검증 완료 베테랑</li><li>리미터 출력 제한 조정 허용</li><li>기밀 데이터 일부 접근 허용</li></ul></div>
+            <div class="rank-card-m" style="border-color: var(--b);"><h5 class="b">일반급 요원</h5><ul><li>제령국 정식 임용 요원</li><li>실시간 통제 시스템 적용</li></ul></div>
+            <div class="rank-card-m" style="border-color: var(--c);"><h5 class="c">지원직 요원</h5><ul><li>현장 보조 및 후방 지원</li><li>리미터 제어 강도 극대화</li><li>개인적 행동 절대 불가</li></ul></div>
+            <div class="rank-card-m" style="border-color: var(--d);"><h5 class="d">관찰 대상</h5><ul><li>최근 소집/사상 불안정</li><li>최고 수준 감시 프로토콜</li><li>상시 제어 시스템 적용</li></ul></div>
+        </div>
+
+        <div class="category-title">작전 1과</div>
+        <div class="agent-card" onclick="va('카와구치 미사키', '관리급', '대통령 직속', '기획조정실장 및 작전 1과 & 4과 과장', '기밀', '이중탄환 특제권총', 'https://raw.githubusercontent.com/kimnari99/misaki/refs/heads/main/KakaoTalk_20260218_222624738_05.png')"><div class="agent-info"><h4>카와구치 미사키</h4><p class="ss">관리급</p></div><div>▶</div></div>
+        <div class="agent-card" onclick="va('류이건', '선임급', '제령국 작전 1과', '배속요원', '늑대 수인화', '돌격소총', 'https://raw.githubusercontent.com/kimnari99/yigunr/refs/heads/main/KakaoTalk_20260218_222624738_06%20(1).jpg')"><div class="agent-info"><h4>류이건</h4><p class="s">선임급</p></div><div>▶</div></div>
+        <div class="agent-card" onclick="va('사토 유이', '일반급', '제령국 작전 1과', '배속요원', '그림자 실체화', '돌격소총', 'https://raw.githubusercontent.com/kimnari99/yui/refs/heads/main/KakaoTalk_20260218_222624738_07.png')"><div class="agent-info"><h4>사토 유이</h4><p class="b">일반급</p></div><div>▶</div></div>
+
+        <div class="category-title">작전 2과</div>
+        <div class="agent-card" onclick="va('권하진', '관리급', '제령국 작전 2과', '과장', '원귀가 봉인된 특이 환도 제어', '원귀가 봉인된 가문 전래의 환도', 'https://raw.githubusercontent.com/kimnari99/hajinrr/refs/heads/main/KakaoTalk_20260224_175042024_01.png')"><div class="agent-info"><h4>권하진</h4><p class="ss">관리급</p></div><div>▶</div></div>
+        <div class="agent-card" onclick="va('쵸비', '지원직', '제령국 작전 2과', '배속요원', '길잡이', '영혼등(지팡이 등불)', 'https://raw.githubusercontent.com/kimnari99/chobi/refs/heads/main/KakaoTalk_20260224_175042024.png')"><div class="agent-info"><h4>쵸비</h4><p class="c">지원직</p></div><div>▶</div></div>
+        <div class="agent-card" onclick="va('베로니카', '지원직', '제령국 작전 2과', '배속요원', '결계 구축 및 아군 치유', '무', 'https://raw.githubusercontent.com/kimnari99/seoyaerin/refs/heads/main/from-PixAI-1977873794880126754-1.png')"><div class="agent-info"><h4>베로니카</h4><p class="c">지원직</p></div><div>▶</div></div>
+
+        <div class="category-title">작전 3과</div>
+        <div class="agent-card" onclick="va('강무진', '관리급', '제령국 작전 3과', '과장', '영역전개(금강불괴)', '무', 'https://raw.githubusercontent.com/kimnari99/mujin/refs/heads/main/KakaoTalk_20260218_222624738_02.png')"><div class="agent-info"><h4>강무진</h4><p class="ss">관리급</p></div><div>▶</div></div>
+        <div class="agent-card" onclick="va('정혜선', '선임급', '제령국 작전 3과', '배속요원', '빙결 제어', '무', 'https://raw.githubusercontent.com/kimnari99/sunhae/refs/heads/main/KakaoTalk_20260218_222624738_03.png')"><div class="agent-info"><h4>정혜선</h4><p class="s">선임급</p></div><div>▶</div></div>
+        <div class="agent-card" onclick="va('서신애', '일반급', '제령국 작전 3과', '배속요원', '순간 미래 예지', '역날검', 'https://raw.githubusercontent.com/kimnari99/yerin/refs/heads/main/KakaoTalk_20260218_222624738_04.png')"><div class="agent-info"><h4>서신애</h4><p class="b">일반급</p></div><div>▶</div></div>
+
+        <div class="category-title">작전 4과</div>
+        <div class="agent-card" onclick="va('황보경', '선임급', '제령국 작전 4과', '배속요원', '나가(주령) 소환 및 제어', '무', 'https://raw.githubusercontent.com/kimnari99/bogyungr/refs/heads/main/KakaoTalk_20260224_175042024_03%20(2).jpg')"><div class="agent-info"><h4>황보경</h4><p class="s">선임급</p></div><div>▶</div></div>
+        <div class="agent-card" onclick="va('카일 브라이어', '일반급', '제령국 작전 4과', '배속요원', '혈액 신체강화', '거대 대낫', 'https://raw.githubusercontent.com/kimnari99/kail/refs/heads/main/KakaoTalk_20260224_175042024_02.png')"><div class="agent-info"><h4>카일 브라이어</h4><p class="b">일반급</p></div><div>▶</div></div>
+
+        <div class="category-title">계약직 및 관찰대상</div>
+        <div class="agent-card" onclick="va('야차', '관찰대상', '제령국 관리 담당', '계약직', '신체강화', '철퇴', 'https://raw.githubusercontent.com/kimnari99/yachar/refs/heads/main/from-PixAI-1983055484553125655-2.png')"><div class="agent-info"><h4>야차</h4><p class="d">관찰대상</p></div><div>▶</div></div>
+        <div class="agent-card" onclick="va('블러디아', '관찰대상', '제령국 관리 담당', '계약직', '촉수 제어 및 흡혈', '생체 촉수', 'https://raw.githubusercontent.com/kimnari99/bludyia/refs/heads/main/from-PixAI-1983059990217377698-0.png')"><div class="agent-info"><h4>블러디아</h4><p class="d">관찰대상</p></div><div>▶</div></div>
+        <div class="agent-card" onclick="va('무영', '관찰대상', '제령국 관리 담당', '계약직', '그림자 은신', '권총(소음기 부착)', 'https://raw.githubusercontent.com/kimnari99/muyungr/refs/heads/main/from-PixAI-1983070830321052156-0.png')"><div class="agent-info"><h4>무영</h4><p class="d">관찰대상</p></div><div>▶</div></div>
+    </div>
+
+    <div id="sec-threat" class="section">
+        <h1 style="font-size: 1.6rem; margin: 10px 0;">Threat Index</h1>
+        
+        <div class="category-title">CODE RED ENTITIES</div>
+        <div class="agent-card" onclick="vt('두억시니', 'Code Red', '두억시니는 검은 유체와 연기성 물질이 응집된 거구의 형태를 띠며, 신체는 명확한 생물학적 구조를 가지지 않는다. 표면은 지속적으로 요동하며, 근육과 골격의 구분이 불가능한 비정형 질량으로 구성되어 있다. 출현 시 물리 법칙 무시 현상이 확인되며, 이동 및 행동 반경 내에서 구조물 붕괴와 공간 압축 현상이 동반된다. 또한 두억시니의 활동 지역에서는 원인 불명의 전염성 질병이 발생하며, 이는 생물학적·초자연적 요인이 복합된 재해로 분류된다.', 'https://raw.githubusercontent.com/kimnari99/duckr/refs/heads/main/KakaoTalk_20260225_235025500.jpg')"><div class="agent-info"><h4>두억시니</h4><p class="ss">Code Red</p></div><div>▶</div></div>
+        
+        <div class="agent-card" onclick="vt('벨라트라', 'Code Red', '벨라트라의 신체 표면은 검은 유기체 물질로 구성되어 지속적인 형태 변화를 보인다. 머리에는 뿔 형태의 돌출 구조물이 존재하며, 두부 상단에서 에너지 반응으로 추정되는 청색 화염 현상이 관측된다. 사지 말단은 필요에 따라 촉수, 날개, 무기형 구조로 재구성된다. 주요 능력은 고도 변신과 위장, 침투에 특화되어 있으며, 대상 조직 내부에 혼란과 분열을 유발한다. 변신 능력 외에도 SS급에 준하는 물리적 파괴력을 보유하고 있어, 정체가 노출된 이후에는 전면 교전 위험도가 급격히 상승한다.', 'https://raw.githubusercontent.com/kimnari99/belatrarr/refs/heads/main/KakaoTalk_20260225_235025500_01.jpg')"><div class="agent-info"><h4>벨라트라</h4><p class="ss">Code Red</p></div><div>▶</div></div>
+
+        <div class="category-title">CODE PINK & ORANGE</div>
+        <div class="agent-card" onclick="vt('그슨대', 'Code Pink', '그슨대는 외형상 인간 소년과 거의 구분되지 않는 모습을 하고 있으며, 주로 후드, 교복 등 일상적인 복장을 착용한 상태로 출현하며, 심리 교란을 통해 대상을 유인·접근한 후 포식하는 방식으로 행동한다. 상대방의 공포가 높아질수록 공격 범위와 위력이 증가한다.', 'https://raw.githubusercontent.com/kimnari99/gsender/refs/heads/main/KakaoTalk_20260225_231441921.jpg')"><div class="agent-info"><h4>그슨대</h4><p class="s">Code Pink</p></div><div>▶</div></div>
+        <div class="agent-card" onclick="vt('킷시라', 'Code Pink', '킷시라는 젊고 아름다운 여성의 외형으로 자유롭게 전환하며, 외형의 완성도가 매우 높아 육안 식별만으로는 주령 판별이 곤란하다. 흉부 중심에는 핵으로 추정되는 발광 부위가 존재한다. 고도의 환술에 특화되어있다.', 'https://raw.githubusercontent.com/kimnari99/kitsyira/refs/heads/main/KakaoTalk_20260225_231441921_01.jpg')"><div class="agent-info"><h4>킷시라</h4><p class="s">Code Pink</p></div><div>▶</div></div>
+        <div class="agent-card" onclick="vt('레이븐', 'Code Orange', '까마귀 수인형 주령, 고속 이동 및 공중 습격.', 'https://raw.githubusercontent.com/kimnari99/raven/refs/heads/main/KakaoTalk_20260218_233409630_03.png')"><div class="agent-info"><h4>레이븐</h4><p class="a">Code Orange</p></div><div>▶</div></div>
+        <div class="agent-card" onclick="vt('호넷', 'Code Orange', '말벌 군체형 주령, 모빙을 통한 형태 변형 및 독침 공격.', 'https://raw.githubusercontent.com/kimnari99/hornet/refs/heads/main/KakaoTalk_20260218_233409630_02.png')"><div class="agent-info"><h4>호넷</h4><p class="a">Code Orange</p></div><div>▶</div></div>
+        <div class="agent-card" onclick="vt('지귀 (이프리트)', 'Code Orange', '겁화형 주령, 화염 방사 및 고온 방출.', 'https://raw.githubusercontent.com/kimnari99/ifrit/refs/heads/main/KakaoTalk_20260218_233409630_06.png')"><div class="agent-info"><h4>지귀</h4><p class="a">Code Orange</p></div><div>▶</div></div>
+
+        <div class="category-title">LOWER ENTITIES</div>
+        <div class="agent-card" onclick="vt('라이칸', 'Code Blue', '늑대형 주령, 물리 공격 특화.', 'https://raw.githubusercontent.com/kimnari99/raik/refs/heads/main/KakaoTalk_20260218_233409630_04.png')"><div class="agent-info"><h4>라이칸</h4><p class="b">Code Blue</p></div><div>▶</div></div>
+        <div class="agent-card" onclick="vt('셰이드', 'Code Blue', '그슨대의 잔여체, 그림자 속에 숨어 공격.', 'https://raw.githubusercontent.com/kimnari99/shade/refs/heads/main/KakaoTalk_20260218_233409630_05.png')"><div class="agent-info"><h4>셰이드</h4><p class="b">Code Blue</p></div><div>▶</div></div>
+        <div class="agent-card" onclick="vt('아라크네', 'Code Green', '거미형 주령.', 'https://raw.githubusercontent.com/kimnari99/arakne/refs/heads/main/KakaoTalk_20260218_233409630_09.png')"><div class="agent-info"><h4>아라크네</h4><p class="c">Code Green</p></div><div>▶</div></div>
+        <div class="agent-card" onclick="vt('나가', 'Code Green', '뱀 형상의 주령.', 'https://raw.githubusercontent.com/kimnari99/naga/refs/heads/main/KakaoTalk_20260218_233409630_10.png')"><div class="agent-info"><h4>나가</h4><p class="c">Code Green</p></div><div>▶</div></div>
+        <div class="agent-card" onclick="vt('스펙터', 'Code White', '귀신형 주령.', 'https://raw.githubusercontent.com/kimnari99/spector/refs/heads/main/KakaoTalk_20260218_233409630_07.png')"><div class="agent-info"><h4>스펙터</h4><p class="d">Code White</p></div><div>▶</div></div>
+        <div class="agent-card" onclick="vt('마네킹', 'Code White', '인간형 주령.', 'https://raw.githubusercontent.com/kimnari99/manek/refs/heads/main/KakaoTalk_20260218_233409630_08.png')"><div class="agent-info"><h4>마네킹</h4><p class="d">Code White</p></div><div>▶</div></div>
+    </div>
+
+    <div id="sec-dept" class="section">
+        <h1 style="font-size: 1.6rem; margin: 10px 0;">Other Dept.</h1>
+        <div class="category-title">Security & Protection (보위국)</div>
+        <div class="agent-card" onclick="va('임진태', '통제관', '보위국 감찰과', '작전통제관', '해당사항 없음', '경찰 장비', 'https://raw.githubusercontent.com/kimnari99/jintae/refs/heads/main/KakaoTalk_20260218_222624738_09.png')"><div class="agent-info"><h4>임진태</h4><p>보위국 감찰과</p></div><div>▶</div></div>
+        <div class="agent-card" onclick="va('한지윤', '통제관', '보위국 감찰과', '작전통제관', '해당사항 없음', '경찰 장비', 'https://raw.githubusercontent.com/kimnari99/jiyoon/refs/heads/main/KakaoTalk_20260218_222624738_08.png')"><div class="agent-info"><h4>한지윤</h4><p>보위국 감찰과</p></div><div>▶</div></div>
+
+        <div class="category-title">Support (본부부서)</div>
+        <div class="agent-card"><div class="agent-info"><h4>기획조정실 (DSP)</h4><p>운영 전략 관리 총괄</p></div></div>
+        <div class="agent-card"><div class="agent-info"><h4>기술국 (TB)</h4><p>장비 개발 및 연구</p></div></div>
+        <div class="agent-card"><div class="agent-info"><h4>홍보국 (PAB)</h4><p>여론 관리 및 사건 은폐</p></div></div>
+    </div>
+</main>
+
+<nav class="tab-bar">
+    <a href="javascript:tab('sec-eab', 0)" class="tab-item active"><span>🛡️</span><span>제령국</span></a>
+    <a href="javascript:tab('sec-threat', 1)" class="tab-item"><span>⚠️</span><span>위협지수</span></a>
+    <a href="javascript:tab('sec-dept', 2)" class="tab-item"><span>🏢</span><span>부서정보</span></a>
+</nav>
+
+<script>
+    function tab(id, idx) {
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        document.querySelectorAll('.tab-item')[idx].classList.add('active');
+        window.scrollTo(0,0);
+    }
+    function va(name, rank, dept, pos, ability, weapon, img) {
+        document.getElementById('detName').innerText = name;
+        document.getElementById('detDeptPos').innerText = dept + " | " + pos;
+        document.getElementById('detPhoto').style.backgroundImage = `url('${img}')`;
+        document.getElementById('detInfoList').innerHTML = `
+            <div class="info-row"><label>RANK</label><span>${rank}</span></div>
+            <div class="info-row"><label>DEPARTMENT</label><span>${dept}</span></div>
+            <div class="info-row"><label>POSITION</label><span>${pos}</span></div>
+            <div class="info-row"><label>ABILITY</label><span>${ability}</span></div>
+            <div class="info-row"><label>WEAPON</label><span>${weapon}</span></div>
+        `;
+        document.getElementById('detailView').style.display = 'block';
+    }
+    function vt(name, code, desc, img) {
+        document.getElementById('detName').innerText = name;
+        document.getElementById('detDeptPos').innerText = code + " IDENTIFIED";
+        document.getElementById('detPhoto').style.backgroundImage = `url('${img}')`;
+        document.getElementById('detInfoList').innerHTML = `
+            <div class="info-row"><label>THREAT LEVEL</label><span>${code}</span></div>
+            <div class="info-row"><label>DESCRIPTION</label><span>${desc}</span></div>
+            <div class="info-row" style="border:none; opacity:0.6;"><label>NOTICE</label><span>본 개체 조우 시 즉시 교전을 중지하고 보고하십시오.</span></div>
+        `;
+        document.getElementById('detailView').style.display = 'block';
+    }
+    function closeDetail() { document.getElementById('detailView').style.display = 'none'; }
+</script>
+</body>
+</html>
