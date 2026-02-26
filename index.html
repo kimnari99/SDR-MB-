@@ -29,11 +29,10 @@
         .rank-card-m h5 { margin: 0 0 10px; font-size: 0.85rem; }
         .rank-card-m ul { margin: 0; padding-left: 15px; font-size: 0.75rem; color: #999; line-height: 1.6; }
         .detail-view { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-black); z-index: 1000; overflow-y: auto; display: none; }
-        /* 얼굴 잘림 방지를 위해 background-position 변경 */
         .detail-header-m { height: 400px; background-size: cover; background-position: top center; position: relative; border-bottom: 2px solid var(--bright-red); }
-        .detail-header-m::after { content: ""; position: absolute; bottom: 0; left: 0; width: 100%; height: 60%; background: linear-gradient(transparent, var(--bg-black)); }
+        /* 사진을 어둡게 만들던 ::after 가상 요소 제거 */
         .close-btn { position: absolute; top: 20px; left: 20px; z-index: 1001; background: rgba(0,0,0,0.6); color: #fff; padding: 10px 18px; border-radius: 30px; font-size: 0.85rem; border: 1px solid #555; backdrop-filter: blur(5px); }
-        .detail-content-m { padding: 20px; margin-top: -20px; position: relative; z-index: 1002; }
+        .detail-content-m { padding: 20px; position: relative; z-index: 1002; }
         .info-row { border-bottom: 1px solid #1a1a1a; padding: 15px 0; display: flex; flex-direction: column; gap: 5px; }
         .info-row label { font-size: 0.7rem; color: var(--bright-red); font-weight: bold; letter-spacing: 1px; }
         .info-row span { font-size: 1rem; color: #ddd; line-height: 1.6; }
@@ -82,7 +81,6 @@
         <div class="agent-card" onclick="va('서신애', '일반급', '제령국 작전 3과', '배속요원', '순간 미래 예지', '역날검', 'https://raw.githubusercontent.com/kimnari99/yerin/refs/heads/main/KakaoTalk_20260218_222624738_04.png')"><div class="agent-info"><h4>서신애</h4><p class="b">일반급</p></div><div>▶</div></div>
 
         <div class="category-title">작전 4과</div>
-        <div class="agent-card" onclick="va('카와구치 미사키', '관리급', '대통령 직속', '기획조정실장 및 작전 1과 & 4과 과장', '기밀', '이중탄환 특제권총', 'https://raw.githubusercontent.com/kimnari99/misaki/refs/heads/main/KakaoTalk_20260218_222624738_05.png')"><div class="agent-info"><h4>카와구치 미사키</h4><p class="ss">관리급</p></div><div>▶</div></div>
         <div class="agent-card" onclick="va('황보경', '선임급', '제령국 작전 4과', '배속요원', '나가(주령) 소환 및 제어', '무', 'https://raw.githubusercontent.com/kimnari99/bogyungr/refs/heads/main/KakaoTalk_20260224_175042024_03%20(2).jpg')"><div class="agent-info"><h4>황보경</h4><p class="s">선임급</p></div><div>▶</div></div>
         <div class="agent-card" onclick="va('카일 브라이어', '일반급', '제령국 작전 4과', '배속요원', '혈액 신체강화', '거대 대낫', 'https://raw.githubusercontent.com/kimnari99/kail/refs/heads/main/KakaoTalk_20260224_175042024_02.png')"><div class="agent-info"><h4>카일 브라이어</h4><p class="b">일반급</p></div><div>▶</div></div>
 
@@ -171,4 +169,3 @@
 </script>
 </body>
 </html>
-
